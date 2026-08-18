@@ -1,17 +1,23 @@
 public with sharing class AccountWithOpportunityController {
     @AuraEnabled(cacheable=true)
-    public static string getAccountWithOpp(){
+    public static List<AccountWithOppWrapper> getAccountWithOpp(){
         try {
+            List<AccountWithOppWrapper> accountWithOppWrapperResult = new List<AccountWithOppWrapper>();
+
             for(Account acc : [SELECT Id, Name, Type, BillingCountry, (SELECT Id FROM Opportunities) 
                                 FROM Account
                                 WHERE OwnerId = :UserInfo.getUserId()]) {
                 AccountWithOppWrapper accWrap = new AccountWithOppWrapper();
                 accWrap.nameUrl = '/' + acc.Id;
                 accWrap.accountId = acc.Id;
+                accWrap.accountName = acc.Name;
                 accWrap.accountType = acc.Type;
                 accWrap.billingCountry = acc.BillingCountry;
                 accWrap.totalOpps = acc.Opportunities.size(); 
+                accountWithOppWrapperResult.add(accWrap);
             }
+
+            return accountWithOppWrapperResult;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
@@ -20,18 +26,21 @@ public with sharing class AccountWithOpportunityController {
 
     public class AccountWithOppWrapper {
         @AuraEnabled
-        String nameUrl;
+        public String nameUrl;
 
         @AuraEnabled
-        String accountId;
+        public String accountId;
 
         @AuraEnabled
-        String accountType;
+        public String accountName;
 
         @AuraEnabled
-        String billingCountry;
+        public String accountType;
 
         @AuraEnabled
-        Number totalOpps;
+        public String billingCountry;
+
+        @AuraEnabled
+        public Integer totalOpps;
     }
 }
