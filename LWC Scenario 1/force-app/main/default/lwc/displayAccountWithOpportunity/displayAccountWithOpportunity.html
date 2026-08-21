@@ -1,0 +1,15 @@
+<template>
+    <div lwc:if={isAccountDataAvailable}>
+        <lightning-datatable
+            key-field="accountId"
+            data={accounts}
+            columns={columns}
+            hide-checkbox-column="true"
+            show-row-number-column="true"
+            onrowaction={handleRowAction}
+        ></lightning-datatable>
+    </div>
+    <div lwc:else>
+        <div>The logged in user has no account records available</div>
+    </div>
+</template>
