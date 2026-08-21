@@ -23,6 +23,21 @@ public with sharing class AccountWithOpportunityController {
         }
     }
 
+    @AuraEnabled
+    public static void deleteAccountWithNoOpenOpps(String accountId) {
+        try {
+            List<Account> accWithOpenOpps = [SELECT Id, (SELECT Id FROM Opportunities WHERE IsClosed = false) FROM Account WHERE Id = :accountId];
+        
+            if(accWithOpenOpps[0].Opportunities.size() > 0) { 
+                throw new AuraHandledException('This account cannot be deleted as it has open opportunities');
+            }
+            delete accWithOpenOpps[0];
+        }
+        catch(Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
 
     public class AccountWithOppWrapper {
         @AuraEnabled
