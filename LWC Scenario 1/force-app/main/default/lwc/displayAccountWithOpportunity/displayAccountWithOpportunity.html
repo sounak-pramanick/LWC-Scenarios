@@ -2,7 +2,7 @@
     <div lwc:if={isAccountDataAvailable}>
         <lightning-datatable
             key-field="accountId"
-            data={accounts}
+            data={accounts.data}
             columns={columns}
             hide-checkbox-column="true"
             show-row-number-column="true"
