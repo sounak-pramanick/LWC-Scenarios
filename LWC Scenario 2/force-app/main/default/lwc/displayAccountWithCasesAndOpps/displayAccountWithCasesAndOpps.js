@@ -6,6 +6,9 @@ export default class DisplayAccountWithCasesAndOpps extends LightningElement {
     @wire(getAccounts)
     accounts;
 
+    cases = [];
+    opportunities = [];
+
     accColumns = [
         { label: 'Account Name', fieldName: 'nameUrl', type: 'url', typeAttributes: {
             label: {
@@ -51,9 +54,6 @@ export default class DisplayAccountWithCasesAndOpps extends LightningElement {
         } },
         { label: 'Stage', fieldName: 'stageName', type: 'text' }
     ];
-
-    cases = [];
-    opportunities = [];
 
     handleRowSelection(event) {
         const selectedRows = event.detail.selectedRows;
